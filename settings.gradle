@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "UnSplah_App_tutorial"

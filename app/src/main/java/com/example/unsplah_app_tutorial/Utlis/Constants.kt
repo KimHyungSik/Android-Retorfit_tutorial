@@ -13,9 +13,10 @@ object API{
     const val  SEARCH_USER = "/search/users"
 }
 
-enum class RESPONSE_STATE{
+enum class RESPONSE_STATUS{
     OKAY,
-    FAIL
+    FAIL,
+    NO_CONTENT
 }
 
 enum class SEARCH_TYPE{

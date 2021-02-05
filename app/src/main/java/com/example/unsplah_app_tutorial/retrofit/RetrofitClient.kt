@@ -1,6 +1,10 @@
 package com.example.unsplah_app_tutorial.retrofit
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
+import com.example.unsplah_app_tutorial.App
 import com.example.unsplah_app_tutorial.Utlis.API
 import com.example.unsplah_app_tutorial.Utlis.Constants.TAG
 import com.example.unsplah_app_tutorial.Utlis.isJsonArray
@@ -73,11 +77,22 @@ object RetrofitClient {
                                                         .url(addedUrl)
                                                         .method(originalRequest.method, originalRequest.body)
                                                         .build()
-                return chain.proceed(finalRequest)
+//                return chain.proceed(finalRequest)
+                val response = chain.proceed(finalRequest)
+                if(response.code != 200){
+                    //Http통신은 메인 UI스레드가 아니라서 메이스레드를 불러서 Toast메시지 사용
+                    Handler(Looper.getMainLooper()).post{
+                        Toast.makeText(App.instance,"${response.code}에러입니다", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+                return response
             }
         })
 
         client.addInterceptor(baseParameterInterceptor)
+
         //커넥션 타임 아웃
         client.connectTimeout(10, TimeUnit.SECONDS)
         client.readTimeout(10, TimeUnit.SECONDS)

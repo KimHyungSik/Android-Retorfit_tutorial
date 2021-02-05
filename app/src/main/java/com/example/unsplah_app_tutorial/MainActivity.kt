@@ -1,22 +1,19 @@
 package com.example.unsplah_app_tutorial
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.unsplah_app_tutorial.Utlis.Constants
-import com.example.unsplah_app_tutorial.Utlis.RESPONSE_STATE
+import com.example.unsplah_app_tutorial.Utlis.RESPONSE_STATUS
 import com.example.unsplah_app_tutorial.Utlis.SEARCH_TYPE
 import com.example.unsplah_app_tutorial.Utlis.onMyTextChange
 import com.example.unsplah_app_tutorial.databinding.ActivityMainBinding
 import com.example.unsplah_app_tutorial.retrofit.RetrofitManager
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_button_search.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -77,33 +74,40 @@ class MainActivity : AppCompatActivity() {
 
         activityMainBinding!!.includeSerarchFrameLyout.searchBtn.setOnClickListener {
 
+            val userSearchInput = activityMainBinding!!.searchThermEditText.text.toString()
+            this.handleSearchButtonUi()
             // 검색 api 호출
-            RetrofitManager.instance.searchPhotos(searchTerm = activityMainBinding!!.searchThermEditText.text.toString(), completrion = {
-                responsState, result ->
+            RetrofitManager.instance.searchPhotos(searchTerm = userSearchInput, completion = {
+                responsState, responseDataArrayList ->
                 when(responsState){
-                    RESPONSE_STATE.OKAY->{
-                        Log.d(TAG, "API 호출 성공 $result")
+                    RESPONSE_STATUS.OKAY->{
+                        val intent = Intent(this, PhotoCollectionActivity::class.java)
+                        val bundle = Bundle()
+                        // 가져온 ArrayList<Photo> 연결
+                        bundle.putSerializable("photo_array_list", responseDataArrayList)
+                        intent.putExtra("array_bundle", bundle)
+                        // 유저 검색어 연결
+                        intent.putExtra("search_term", userSearchInput)
+                        startActivity(intent)
                     }
-                    RESPONSE_STATE.FAIL->{
+                    RESPONSE_STATUS.FAIL->{
                         Toast.makeText(this, "api 호출 에러입니다", Toast.LENGTH_SHORT).show()
+                    }
+                    RESPONSE_STATUS.NO_CONTENT->{
+                        Toast.makeText(this, "검색 결과가 없습니다", Toast.LENGTH_SHORT).show()
                     }
                 }
             })
-
-            this.handleSearchButtonUi()
+            activityMainBinding!!.includeSerarchFrameLyout.searchProgressBar.visibility = View.INVISIBLE
+            activityMainBinding!!.includeSerarchFrameLyout.searchBtn.text = "검색"
+            activityMainBinding!!.searchThermEditText.setText("")
         }
-
     }
 
     private fun handleSearchButtonUi(){
         activityMainBinding!!.includeSerarchFrameLyout.searchProgressBar.visibility = View.VISIBLE
-
         activityMainBinding!!.includeSerarchFrameLyout.searchBtn.text = ""
 
-        Handler().postDelayed({
-            activityMainBinding!!.includeSerarchFrameLyout.searchProgressBar.visibility = View.INVISIBLE
-            activityMainBinding!!.includeSerarchFrameLyout.searchBtn.text = "검색"
-        }, 1500)
     }
 
 }

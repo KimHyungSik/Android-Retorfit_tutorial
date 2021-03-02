@@ -3,14 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
+        android:id="@+id/search_menu_item"
         android:icon="@drawable/ic_baseline_search_24"
         android:title="검색"
         android:contentDescription="사진검색"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        />
 
     <item
-        android:id="@+id/more"
+        android:id="@+id/more_menu_item"
         android:icon="@drawable/ic_baseline_more_vert_24"
         android:title="더보기"
         android:contentDescription="더보기 메뉴"

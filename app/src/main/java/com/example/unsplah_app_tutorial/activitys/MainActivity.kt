@@ -1,18 +1,19 @@
-package com.example.unsplah_app_tutorial
+package com.example.unsplah_app_tutorial.activitys
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.unsplah_app_tutorial.R
 import com.example.unsplah_app_tutorial.Utlis.Constants
 import com.example.unsplah_app_tutorial.Utlis.RESPONSE_STATUS
 import com.example.unsplah_app_tutorial.Utlis.SEARCH_TYPE
 import com.example.unsplah_app_tutorial.Utlis.onMyTextChange
 import com.example.unsplah_app_tutorial.databinding.ActivityMainBinding
+
 import com.example.unsplah_app_tutorial.retrofit.RetrofitManager
 
 class MainActivity : AppCompatActivity() {
@@ -40,13 +41,15 @@ class MainActivity : AppCompatActivity() {
                 R.id.photo_search_radio_btn ->{
                     Log.d(TAG, "사진 검색 버튼 클릭")
                     activityMainBinding!!.searchThemeTextLayout.hint = "사진검색"
-                    activityMainBinding!!.searchThemeTextLayout.startIconDrawable = resources.getDrawable(R.drawable.ic_image_black, resources.newTheme())
+                    activityMainBinding!!.searchThemeTextLayout.startIconDrawable = resources.getDrawable(
+                        R.drawable.ic_image_black, resources.newTheme())
                     this.currentSearchType = SEARCH_TYPE.PHOTO
                 }
-                R.id.user_search_radio_btn->{
+                R.id.user_search_radio_btn ->{
                     Log.d(TAG, "사용자 검색 버튼 클릭")
                     activityMainBinding!!.searchThemeTextLayout.hint = "사용자검색"
-                    activityMainBinding!!.searchThemeTextLayout.startIconDrawable = resources.getDrawable(R.drawable.ic_person_black, resources.newTheme())
+                    activityMainBinding!!.searchThemeTextLayout.startIconDrawable = resources.getDrawable(
+                        R.drawable.ic_person_black, resources.newTheme())
                     this.currentSearchType = SEARCH_TYPE.USER
                 }
             }
